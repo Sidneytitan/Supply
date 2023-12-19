@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='kanban.css') }}">
+    <script src="{{ url_for('static', filename='kanban.js') }}"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='layout_lista_fornecedor.css') }}">
+</head>
+<body>
+
+   <!-- Menu Navigation Bar -->
+    <div class="menu-with-background">
+        <div class="menu">
+            <a href="/">Home</a>
+            <a href="/listafornecedor">Lista de Fornecedor</a>
+            <a href="kanban">Cotações</a>
+             <a href="pedido">Pedido</a>
+        </div>
+        <div class="neon supply-chain">Supply Chain</div>
+        <div class="neon fornecedores">Gestão de Cotações</div>
+    </div>
+
+    <div class="container">
+        <div class="kanban-heading">
+            <strong class="kanban-heading-text"></strong>
+        </div>
+
+        <div class="kanban-board">
+            <div class="kanban-block" id="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <strong>Cotações Pendentes<span id="todo-count"></span></strong>
+                <div class="task-button-block">
+                    <button id="task-button" onclick="createTask()">Cadastro de Cotação</button>
+                </div>
+
+                <!-- Iterar sobre os dados do MongoDB e exibi-los -->
+                {% for item in dados_kanban %}
+                    <div class="task" id="{{ item._id }}" draggable="true" ondragstart="drag(event)">
+                        <span><strong>Título:</strong> {{ item.titulo }}</span>
+                        <span><strong>Descrição:</strong> {{ item.descricao }}</span>
+                        <span><strong>Status:</strong> {{ item.status }}</span>
+
+                        <!-- Adicionar botão de exclusão apenas para a última coluna -->
+                        {% if item.status == 'done' %}
+                            <button class="delete-button" onclick="excluirCotacao('{{ item._id }}')">Excluir</button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="kanban-block" id="inprogress" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <strong>Realizando Orçamentos<span id="inprogress-count"></span></strong>
+            </div>
+
+            <div class="kanban-block" id="done" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <strong>Cotações Finalizadas<span id="done-count"></span></strong>
+            </div>
+
+            <div class="create-new-task-block" id="create-new-task-block">
+                <strong>Nova Cotação</strong>
+                <span class="form-row">
+                    <label class="form-row-label" for="new-task-title">Numero da Cotação</label>
+                    <input class="form-row-input" type="text" name="new-task-title" id="new-task-title">
+                </span>
+                <span class="form-row">
+                    <label class="form-row-label" for="new-task-description">Observação</label>
+                    <textarea class="form-row-input" name="new-task-description" id="new-task-description" cols="70" rows="10"></textarea>
+                </span>
+                <span class="form-row">
+                    <label class="form-row-label" for="new-task-status">Status</label>
+                    <select class="form-row-input" name="new-task-status" id="new-task-status">
+                        <option value="todo">To Do</option>
+                        <option value="inprogress">In Progress</option>
+                        <option value="done">Done</option>
+                    </select>
+                </span>
+                <span class="form-row-buttons">
+                    <button id="edit-button" onclick="editTask()">Edit</button>
+                    <button id="save-button" onclick="saveTask()">Adicionar Cotação</button>
+                    <button id="cancel-button" onclick="createTask()">Fechar</button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+

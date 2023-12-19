@@ -1,0 +1,223 @@
+/* Estilizando os campos "Placa" e "Transportadora" */
+input[type="text"] {
+    margin-bottom: 20px; /* Espaçamento inferior */
+    margin-left: 5px; /* Espaço à esquerda do campo de entrada */
+    width: calc(20% - 20px); /* Ocupa 20% da largura disponível com margens à direita e à esquerda */
+    padding: 10px; /* Espaçamento interno */
+    border: 1px solid #ccc; /* Borda com cor cinza claro */
+    border-radius: 5px; /* Bordas arredondadas */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Sombra ao redor do campo */
+    font-size: 10px; /* Tamanho da fonte */
+    color: #333; /* Cor do texto */
+}
+
+/* Estilizando o botão */
+.meu-botao {
+    background-color: #164888; /* Cor do fundo do botão */
+    border: none;
+    color: white; /* Cor do texto dentro do botão */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px; /* Tamanho da fonte */
+    margin: 8px 4px; /* Espaçamento interno */
+    cursor: pointer;
+    border-radius: 24px; /* Raio da borda para torná-lo arredondado */
+    padding: 14px 28px; /* Espaçamento interno do botão */
+    transition: background-color 0.4s, opacity 0.4s; /* Transição para a cor de fundo e opacidade */
+    opacity: 0.9; /* Opacidade inicial */
+}
+
+/* Estilo do botão ao passar o mouse por cima */
+.meu-botao:hover {
+    background-color: #3F48CC; /* Cor de fundo ao passar o mouse */
+    opacity: 1; /* Opacidade ao passar o mouse (totalmente visível) */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Efeito de sombra ao passar o mouse */
+}
+
+/* esse elemento eu posso usar quando quiser mudar a posição de algo */
+.elemento {
+    position: relative;
+    top: 20px;
+    left: 30px;
+}
+
+/* No seu arquivo CSS */
+input:invalid {
+    border-color: red; /* Cor da borda para campos inválidos */
+    background-color: #ffcccc; /* Cor de fundo para campos inválidos */
+}
+
+input:valid {
+    border-color: green; /* Cor da borda para campos válidos */
+    background-color: #ccffcc; /* Cor de fundo para campos válidos */
+}
+
+/* Estilizando o título h1 */
+h1 {
+    font-size: 36px; /* Tamanho da fonte */
+    color: #333; /* Cor do texto */
+    text-align: right; /* Alinhamento do texto à direita */
+    margin-bottom: 20px; /* Espaçamento inferior */
+    text-transform: uppercase; /* Transforma o texto em maiúsculas */
+    letter-spacing: 2px; /* Espaçamento entre letras */
+}
+
+/* Estilo para o contêiner principal */
+.container {
+    width: 80%; /* Ajuste a largura conforme necessário */
+    margin: 0 auto; /* Centraliza o contêiner na página */
+    text-align: right; /* Alinha o texto à direita dentro do contêiner */
+}
+
+/* Restante do seu código CSS */
+/* ... */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  --delay: 0;
+  --duration: 800ms;
+  --iterations: 1;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.wrapper {
+  width: 400px;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(-210%); /* Move todo o conteúdo para o lado esquerdo */
+  transition: transform var(--duration); /* Adiciona uma transição para suavizar o movimento */
+}
+
+main {
+  align-self: center;
+  display: flex;
+  background: #C3C3C3;
+  height: 200%;
+  width: 300%;
+  justify-content: center;
+}
+
+.container {
+  height: 100%;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+span {
+  border-bottom: 4px solid white;
+  width: 100%;
+  margin: -3px;
+}
+
+h1 {
+  line-height: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  margin: 0;
+  font-size: 72px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+    'Lucida Sans', Arial, sans-serif;
+  text-transform: uppercase;
+  font-weight: 900;
+}
+
+.reveal-text,
+.reveal-text::after {
+  animation-delay: var(--animation-delay, 2s);
+  animation-iteration-count: var(--iterations, 1);
+  animation-duration: var(--duration, 800ms);
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+.reveal-text {
+  --animation-delay: var(--delay, 0);
+  --animation-duration: var(--duration, 800ms);
+  --animation-iterations: var(--iterations, 1);
+  position: relative;
+  animation-name: clip-text;
+  color: #fff;
+  white-space: nowrap;
+  cursor: default;
+  overflow: hidden;
+}
+
+.reveal-text::after {
+  content: '';
+  position: absolute;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  pointer-events: none;
+  animation-name: text-revealer;
+}
+
+@keyframes clip-text {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes text-revealer {
+  0%,
+  100% {
+    transform-origin: 0 50%;
+    transform: scaleX(1);
+  }
+  100% {
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+  }
+}
+
+
+.text-tela {
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  color: #040F01;
+  font-weight: bold;
+  margin-top: 10px; /* Ajusta a margem superior (espaço acima do texto) */
+  margin-left: -10px;
+
+
+
+  /* Outras propriedades de estilo de fonte conforme necessário */
+}
+
+<head>
+    <!-- ... outras meta tags e links ... -->
+    <link rel="stylesheet" href="caminho/para/o/seu/arquivo/estilos.css">
+</head>
+
+<body>
+    <!-- ... conteúdo do corpo ... -->
+</body>
+
+</html>
+
+

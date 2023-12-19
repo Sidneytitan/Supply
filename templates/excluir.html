@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excluir Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Botao_cadastro.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:600">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Excluir Registro da lista de fornecedor</h1>
+        <form action="/excluir" method="post">
+            {% if dados %}
+                {% for key, value in dados.items() %}
+                    {{ key }}: {{ value }}<br>
+                {% endfor %}
+                <input type="hidden" name="Fornecedor" value="{{ dados.Fornecedor }}">
+            {% else %}
+                <label for="Fornecedor">Fornecedor:</label>
+                <input type="text" id="Fornecedor" name="Fornecedor" required><br>
+            {% endif %}
+           <input type="submit" class="meu-botao" value="Excluir">
+        </form>
+    </div>
+</body>
+
+</html>
+
+<body>
+    <div class="wrapper">
+      <main>
+        <section class="container">
+          <span></span>
+          <h1 class="reveal-text">Ayla Maria</h1>
+          <span></span>
+            <span></span>
+          <p class="reveal-text">Welcome</p>
+          <span></span>
+        </section>
+      </main>
+    </div>
+  </body>
+
+
+

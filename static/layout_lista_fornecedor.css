@@ -1,0 +1,161 @@
+.body {
+    font-family: "Times New Roman", sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #0B1D27; /* Cor de fundo desejada */
+}
+
+.menu-with-background {
+    position: relative;
+    background-color: #0B1D27; /* Cor de fundo desejada */
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: "Times New Roman", sans-serif;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    text-align: left;
+    margin-top: -10px; /* Ajuste a margem conforme necessário */
+}
+
+.menu-with-background a {
+    text-decoration: none;
+    padding: 30px 5px; /* 10px para cima/baixo, 5px para esquerda/direita */
+    margin: 0 10px;
+    font-size: 20px;
+    color: white;
+    font-weight: normal;
+    text-align: center;
+}
+
+.menu-with-background a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.neon {
+    margin-top: -10px; /* Ajuste a margem conforme necessário */
+    font-variant: small-caps;
+    font-weight: bold;
+    font-size: 30px;
+    color: #FFFFFF;
+    transition: text-shadow 0.3s ease-out; /* Adicionado para animar a transição */
+}
+
+.supply-chain:hover,
+.fornecedores:hover {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+.supply-chain {
+    margin-left: 75%; /* Ajuste conforme necessário */
+}
+
+.fornecedores {
+    margin-left: 70%; /* Ajuste conforme necessário */
+}
+
+.menu a:hover {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+.menu a:nth-child(1):hover {
+    text-shadow: 0 0 10px rgba(255, 100, 100, 0.8), 0 0 20px rgba(255, 0, 0, 0.8);
+}
+
+.menu a:nth-child(2):hover {
+    text-shadow: 0 0 10px rgba(100, 255, 100, 0.8), 0 0 20px rgba(0, 255, 0, 0.8);
+}
+
+.menu a:nth-child(3):hover {
+    text-shadow: 0 0 10px rgba(100, 100, 255, 0.8), 0 0 20px rgba(0, 0, 255, 0.8);
+}
+
+/* Estilo geral da tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+/* Estilo do cabeçalho da tabela */
+th {
+    background-color: #0B1D27; /* Cor de fundo do cabeçalho */
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+}
+
+/* Estilo das células da tabela */
+td {
+    border: 1px solid #ddd; /* Cor da borda das células */
+    padding: 10px;
+}
+
+/* Alterna as cores de fundo das linhas para melhor legibilidade */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Estilo para realçar a linha quando o mouse passa sobre ela */
+tr:hover {
+    background-color: #ddd;
+}
+
+/* Estilo para o botão de pesquisa */
+button {
+    background-color: #0B1D27; /* Cor de fundo do botão */
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Estilo para o campo de pesquisa */
+input[type="text"] {
+    padding: 10px;
+}
+
+/* Estilo para o campo de seleção de filtro */
+select {
+    padding: 10px;
+}
+
+/* Estilo para o botão de cadastro */
+.button-cadastro {
+    background-color: #4CAF50; /* Cor de fundo do botão de cadastro */
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    margin-left: 32%;
+    margin-top: 40px; /* Ajuste conforme necessário */
+}
+
+/* Estilo para o botão de excluir */
+.button-excluir {
+    background-color: #FF0000; /* Cor de fundo do botão de excluir */
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    margin-top: 40px; /* Ajuste conforme necessário */
+}
+
+/* Estilo para os botões no hover (quando o mouse passa por cima) */
+.button-cadastro:hover, .button-excluir:hover {
+    opacity: 0.8;
+}
+
+/* bara abaixar a tabela */
+.table-container {
+    margin-top: 60px; /* Ajuste conforme necessário */
+}
+

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='layout_lista_fornecedor.css') }}">
+    <style>
+        /* Coloque aqui o conteúdo do seu CSS */
+    </style>
+</head>
+
+<body>
+    <!-- Menu Navigation Bar -->
+    <div class="menu-with-background">
+        <div class="menu">
+            <a href="/">Home</a>
+            <a href="/listafornecedor">Lista de Fornecedor</a>
+            <a href="kanban">Cotações</a>
+            <a href="pedido">Pedido</a>
+        </div>
+        <div class="neon supply-chain">Supply Chain</div>
+        <div class="neon fornecedores">Gestão de Fornecedores</div>
+    </div>
+
+    <!-- Adicione o campo de pesquisa -->
+    <form action="/pesquisar" method="GET">
+        <label for="filtro">Filtrar por:</label>
+        <select name="filtro">
+            <option value="fornecedor">Fornecedor</option>
+            <option value="cnpj">CNPJ</option>
+            <option value="local">Local</option>
+             <option value="Forma_pagamento">Forma de pagamento</option>
+            <!-- Adicione outras opções para colunas que deseja permitir a pesquisa -->
+        </select>
+        <input type="text" name="termo" placeholder="Digite sua pesquisa">
+        <button type="submit">Pesquisar</button>
+    </form>
+
+
+    <div class="table-container">
+        <div>
+        <a href="adicionar" class="button-cadastro">Cadastro de Fornecedor</a>
+        <a href="excluir" class="button-excluir">Excluir de Fornecedor</a>
+    </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fornecedor</th>
+                    <th>CNPJ</th>
+                    <th>Telefone</th>
+                    <th>Responsável</th>
+                    <th>Local</th>
+                    <th>CEP</th>
+                    <th>Ramo</th>
+                    <th>Forma de pagamento</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in data_list %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ item.get('fornecedor', '') }}</td>
+                        <td>{{ item.get('cnpj', '') }}</td>
+                        <td>{{ item.get('telefone', '') }}</td>
+                        <td>{{ item.get('responsavel', '') }}</td>
+                        <td>{{ item.get('local', '') }}</td>
+                        <td>{{ item.get('cep', '') }}</td>
+                        <td>{{ item.get('Ramo', '') }}</td>
+                        <td>{{ item.get('Forma_pagamento', '') }}</td>
+
+
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

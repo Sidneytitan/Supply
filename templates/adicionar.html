@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Novo Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Botao_cadastro.css') }}">
+    <script src="{{ url_for('static', filename='cadastro.js') }}"></script>
+    <style>
+        body {
+            text-align: left;
+            margin: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            color: #333;
+        }
+
+        .meu-botao {
+            background-color: #164888;
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+            margin: 8px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            padding: 14px 20px;
+            transition: background-color 0.4s, opacity 0.4s;
+            opacity: 0.9;
+        }
+
+        .meu-botao:hover {
+            background-color: #3F48CC;
+            opacity: 1;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Adicionar Novo Registro</h1>
+
+    <form action="/adicionar_fornecedor" method="post">
+        Fornecedor: <input type="text" name="fornecedor" required><br>
+        CNPJ: <input type="text" name="cnpj" required><br>
+        Telefone: <input type="text" name="telefone" required><br>
+        Responsavel: <input type="text" name="responsavel" required><br>
+        Local: <input type="text" name="local" required><br>
+        CEP: <input type="text" name="cep" required><br>
+        Ramo: <input type="text" name="ramo" required><br>
+        Forma de Pagamento: <input type="text" name="forma_pagamento" required><br>
+        <input type="submit" class="meu-botao" value="Adicionar">
+    </form>
+
+    <div class="wrapper">
+        <main>
+            <section class="container">
+                <span></span>
+                <h1 class="reveal-text">Ayla Maria</h1>
+                <span></span>
+                <span></span>
+                <p class="reveal-text">Welcome</p>
+                <span></span>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>
