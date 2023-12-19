@@ -20,6 +20,67 @@ collection_lista_fornecedor = mongo.db.lista_fornecedor
 def homepage():
     return render_template('homepage.html')
 
+# Rota para exibir a lista de fornecedores
+@app.route('/listafornecedor')
+def lista_fornecedor():
+    # Obtendo dados do MongoDB
+    data_list = list(collection_lista_fornecedor.find())
+    return render_template('index.html', data_list=data_list)
+
+
+
+# Rota para exibir o formulário de adição
+@app.route('/adicionar', methods=['GET'])
+def exibir_formulario_adicao():
+    return render_template('adicionar.html')
+
+# Rota para lidar com a adição de fornecedores (POST)
+@app.route('/adicionar_fornecedor', methods=['POST'])
+def adicionar_fornecedor():
+    if request.method == 'POST':
+        novo_fornecedor = {
+            'fornecedor': request.form['fornecedor'],
+            'cnpj': request.form['cnpj'],
+            'telefone': request.form['telefone'],
+            'responsavel': request.form['responsavel'],
+            'local': request.form['local'],
+            'cep': request.form['cep'],
+            'Ramo': request.form['ramo'],
+            'Forma_pagamento': request.form['forma_pagamento']
+        }
+
+        # Insere o fornecedor no MongoDB
+        collection_lista_fornecedor.insert_one(novo_fornecedor)
+
+    return redirect(url_for('lista_fornecedor'))
+
+# Rota para exibir o formulário de exclusão
+@app.route('/excluir', methods=['GET', 'POST'])
+def exibir_formulario_exclusao():
+    if request.method == 'POST':
+        # Obtendo o nome do fornecedor a ser excluído do formulário
+        excluir = request.form['Fornecedor']
+
+        # Excluir o fornecedor pelo nome
+        collection_lista_fornecedor.delete_one({'fornecedor': excluir})
+
+        return redirect(url_for('lista_fornecedor'))
+
+    return render_template('excluir.html')
+
+# Adicione uma rota para lidar com a pesquisa
+@app.route('/pesquisar', methods=['GET'])
+def pesquisar():
+    # Obter os parâmetros da pesquisa
+    filtro = request.args.get('filtro')
+    termo = request.args.get('termo')
+
+    # Construir a consulta MongoDB com base nos parâmetros de pesquisa
+    query = {filtro: {'$regex': termo, '$options': 'i'}}
+    data_list = list(collection_lista_fornecedor.find(query))
+
+    return render_template('index.html', data_list=data_list)
+
 
 @app.route('/pedido')
 def pedido():
@@ -120,66 +181,7 @@ def excluir_cotacao(item_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Rota para exibir a lista de fornecedores
-@app.route('/listafornecedor')
-def lista_fornecedor():
-    # Obtendo dados do MongoDB
-    data_list = list(collection_lista_fornecedor.find())
-    return render_template('index.html', data_list=data_list)
 
-
-
-# Rota para exibir o formulário de adição
-@app.route('/adicionar', methods=['GET'])
-def exibir_formulario_adicao():
-    return render_template('adicionar.html')
-
-# Rota para lidar com a adição de fornecedores (POST)
-@app.route('/adicionar_fornecedor', methods=['POST'])
-def adicionar_fornecedor():
-    if request.method == 'POST':
-        novo_fornecedor = {
-            'fornecedor': request.form['fornecedor'],
-            'cnpj': request.form['cnpj'],
-            'telefone': request.form['telefone'],
-            'responsavel': request.form['responsavel'],
-            'local': request.form['local'],
-            'cep': request.form['cep'],
-            'Ramo': request.form['ramo'],
-            'Forma_pagamento': request.form['forma_pagamento']
-        }
-
-        # Insere o fornecedor no MongoDB
-        collection_lista_fornecedor.insert_one(novo_fornecedor)
-
-    return redirect(url_for('lista_fornecedor'))
-
-# Rota para exibir o formulário de exclusão
-@app.route('/excluir', methods=['GET', 'POST'])
-def exibir_formulario_exclusao():
-    if request.method == 'POST':
-        # Obtendo o nome do fornecedor a ser excluído do formulário
-        excluir = request.form['Fornecedor']
-
-        # Excluir o fornecedor pelo nome
-        collection_lista_fornecedor.delete_one({'fornecedor': excluir})
-
-        return redirect(url_for('lista_fornecedor'))
-
-    return render_template('excluir.html')
-
-# Adicione uma rota para lidar com a pesquisa
-@app.route('/pesquisar', methods=['GET'])
-def pesquisar():
-    # Obter os parâmetros da pesquisa
-    filtro = request.args.get('filtro')
-    termo = request.args.get('termo')
-
-    # Construir a consulta MongoDB com base nos parâmetros de pesquisa
-    query = {filtro: {'$regex': termo, '$options': 'i'}}
-    data_list = list(collection_lista_fornecedor.find(query))
-
-    return render_template('index.html', data_list=data_list)
 
 if __name__ == "__main__":
     app.run(debug=True)
