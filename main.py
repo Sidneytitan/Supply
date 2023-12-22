@@ -1,8 +1,14 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask_socketio import SocketIO, emit
 from flask_pymongo import PyMongo
 from bson import ObjectId
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'mysecret'
+socketio = SocketIO(app)
+
+# Restante do seu código...
+
 
 # Configuração do MongoDB
 app.config['MONGO_URI'] = "mongodb+srv://sidneycko:titanbetty@cluster0.feenv6t.mongodb.net/supply"
@@ -12,8 +18,6 @@ mongo = PyMongo(app)
 collection_pedido = mongo.db.pedido
 collection_cotacao = mongo.db.cotacao
 collection_lista_fornecedor = mongo.db.lista_fornecedor
-
-
 
 # Rota para exibir a página inicial
 @app.route('/')
@@ -26,8 +30,6 @@ def lista_fornecedor():
     # Obtendo dados do MongoDB
     data_list = list(collection_lista_fornecedor.find())
     return render_template('index.html', data_list=data_list)
-
-
 
 # Rota para exibir o formulário de adição
 @app.route('/adicionar', methods=['GET'])
@@ -52,21 +54,10 @@ def adicionar_fornecedor():
         # Insere o fornecedor no MongoDB
         collection_lista_fornecedor.insert_one(novo_fornecedor)
 
+        # Emitir evento Socket.IO para atualizar Kanban em tempo real
+        socketio.emit('atualizar_kanban', namespace='/kanban')
+
     return redirect(url_for('lista_fornecedor'))
-
-# Rota para exibir o formulário de exclusão
-@app.route('/excluir', methods=['GET', 'POST'])
-def exibir_formulario_exclusao():
-    if request.method == 'POST':
-        # Obtendo o nome do fornecedor a ser excluído do formulário
-        excluir = request.form['Fornecedor']
-
-        # Excluir o fornecedor pelo nome
-        collection_lista_fornecedor.delete_one({'fornecedor': excluir})
-
-        return redirect(url_for('lista_fornecedor'))
-
-    return render_template('excluir.html')
 
 # Adicione uma rota para lidar com a pesquisa
 @app.route('/pesquisar', methods=['GET'])
@@ -80,7 +71,6 @@ def pesquisar():
     data_list = list(collection_lista_fornecedor.find(query))
 
     return render_template('index.html', data_list=data_list)
-
 
 @app.route('/pedido')
 def pedido():
@@ -100,6 +90,9 @@ def add():
     new_task = {'titulo': titulo, 'descricao': descricao, 'status': status}
     result = collection_pedido.insert_one(new_task)
 
+    # Emitir evento Socket.IO para atualizar Kanban em tempo real
+    socketio.emit('atualizar_kanban', namespace='/kanban')
+
     # Retorna a resposta em formato JSON
     return jsonify({'success': True, 'message': 'Pedido adicionado com sucesso!', 'taskId': str(result.inserted_id)})
 
@@ -108,6 +101,9 @@ def add():
 def delete(pedido_id):
     # Remove o pedido do banco de dados pelo ID
     collection_pedido.delete_one({'_id': ObjectId(pedido_id)})
+
+    # Emitir evento Socket.IO para atualizar Kanban em tempo real
+    socketio.emit('atualizar_kanban', namespace='/kanban')
 
     return jsonify({'message': 'Pedido excluído com sucesso', 'success': True})
 
@@ -152,6 +148,9 @@ def criar_cotacao():
         # Recupere o ID da cotação recém-criada
         novo_item_id = str(novo_item.inserted_id)
 
+        # Emitir evento Socket.IO para atualizar Kanban em tempo real
+        socketio.emit('atualizar_kanban', namespace='/kanban')
+
         return jsonify({'success': True, 'message': 'Cotação criada com sucesso!', 'taskId': novo_item_id})
 
     return jsonify({'success': False, 'message': 'Falha ao criar cotação.'})
@@ -164,6 +163,10 @@ def mover_item_coluna(item_id, nova_coluna):
         {'_id': ObjectId(item_id)},
         {'$set': {'status': nova_coluna}}
     )
+
+    # Emitir evento Socket.IO para atualizar Kanban em tempo real
+    socketio.emit('atualizar_kanban', namespace='/kanban')
+
     return jsonify({'message': 'Item movido com sucesso!'})
 
 # Rota para excluir uma cotação
@@ -174,6 +177,8 @@ def excluir_cotacao(item_id):
         result = collection_cotacao.delete_one({'_id': ObjectId(item_id)})
 
         if result.deleted_count == 1:
+            # Emitir evento Socket.IO para atualizar Kanban em tempo real
+            socketio.emit('atualizar_kanban', namespace='/kanban')
             return jsonify({'message': 'Cotação excluída com sucesso!'})
         else:
             return jsonify({'error': 'Cotação não encontrada'}), 404
@@ -181,10 +186,9 @@ def excluir_cotacao(item_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True, use_reloader=False, allow_unsafe_werkzeug=True)
+
 
 #Anotação
 
