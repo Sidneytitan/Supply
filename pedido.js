@@ -112,6 +112,8 @@ function saveTask() {
     });
 }
 
+
+
 function editTask() {
     var saveButton = document.getElementById("save-button");
     var editButton = document.getElementById("edit-button");
@@ -237,6 +239,8 @@ function createCardHTML(taskId, title, description, status) {
     return cardHTML;
 }
 
+// Seu código JavaScript existente...
+
 // Adicione o seguinte script no final do seu arquivo JavaScript
 var socket = io.connect('http://' + document.domain + ':' + location.port + '/kanban');
 
@@ -245,3 +249,4 @@ socket.on('atualizar_kanban', function() {
     // Aqui você deve implementar a lógica para atualizar o seu Kanban
     console.log('Atualizar Kanban em tempo real.');
 });
+
