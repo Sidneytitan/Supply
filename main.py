@@ -1,6 +1,5 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from flask_pymongo import PyMongo
-from flask_socketio import SocketIO
 from bson import ObjectId
 
 app = Flask(__name__)
@@ -9,18 +8,18 @@ app = Flask(__name__)
 app.config['MONGO_URI'] = "mongodb+srv://sidneycko:titanbetty@cluster0.feenv6t.mongodb.net/supply"
 mongo = PyMongo(app)
 
-# Configuração do SocketIO
-socketio = SocketIO(app)
-
 # Conectar a diferentes coleções
 collection_pedido = mongo.db.pedido
 collection_cotacao = mongo.db.cotacao
 collection_lista_fornecedor = mongo.db.lista_fornecedor
 
+
+
 # Rota para exibir a página inicial
 @app.route('/')
 def homepage():
     return render_template('homepage.html')
+
 
 @app.route('/pedido')
 def pedido():
@@ -42,6 +41,18 @@ def add():
 
     # Retorna a resposta em formato JSON
     return jsonify({'success': True, 'message': 'Pedido adicionado com sucesso!', 'taskId': str(result.inserted_id)})
+
+
+# Adicione a seguinte rota no seu código Flask
+@app.route('/atualizar_posicao_cartoes', methods=['POST'])
+def atualizar_posicao_cartoes():
+    data = request.get_json()
+
+    # Atualizar a posição dos cartões no servidor (MongoDB, por exemplo)
+    # ...
+
+    return jsonify({'message': 'Posição dos cartões atualizada com sucesso!'})
+
 
 # Rota para excluir um pedido
 @app.route('/delete/<pedido_id>', methods=['DELETE'])
@@ -128,6 +139,8 @@ def lista_fornecedor():
     data_list = list(collection_lista_fornecedor.find())
     return render_template('index.html', data_list=data_list)
 
+
+
 # Rota para exibir o formulário de adição
 @app.route('/adicionar', methods=['GET'])
 def exibir_formulario_adicao():
@@ -180,21 +193,8 @@ def pesquisar():
 
     return render_template('index.html', data_list=data_list)
 
-# Evento SocketIO para atualizar o quadro em tempo real
-@socketio.on('connect')
-def handle_connect():
-    # Lógica quando um cliente se conecta
-    print('Cliente conectado.')
-
-@socketio.on('disconnect')
-def handle_disconnect():
-    # Lógica quando um cliente se desconecta
-    print('Cliente desconectado.')
-
 if __name__ == "__main__":
-    # Inicie o servidor Flask junto com o servidor SocketIO
-    socketio.run(app, debug=True)
-
+    app.run(debug=True)
 
 #Anotação
 
