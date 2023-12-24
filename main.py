@@ -110,16 +110,16 @@ def criar_cotacao():
 
 
 # Rota para mover um item para uma nova coluna
+# Rota para mover um item para uma nova coluna
 @app.route('/mover_item_coluna/<item_id>/<nova_coluna>', methods=['PUT'])
 def mover_item_coluna(item_id, nova_coluna):
-    # Atualizar o status do item no MongoDB
     collection_cotacao.update_one(
         {'_id': ObjectId(item_id)},
         {'$set': {'status': nova_coluna}}
     )
 
-    # Emite a atualização para todos os clientes conectados
-    socketio.emit('atualizar_kanban', namespace='/kanban', broadcast=True)
+    # Emitir o evento para todos os clientes conectados
+    socketio.emit('atualizar_kanban', namespace='/kanban')
 
     return jsonify({'message': 'Item movido com sucesso!'})
 
