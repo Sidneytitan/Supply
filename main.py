@@ -91,16 +91,20 @@ def criar_cotacao():
     return jsonify({'success': False, 'message': 'Falha ao criar cotação.'})
 
 
+# Rota para mover um item para uma nova coluna
 @app.route('/mover_item_coluna/<item_id>/<nova_coluna>', methods=['PUT'])
 def mover_item_coluna(item_id, nova_coluna):
-    collection_cotacao.update_one(
-        {'_id': ObjectId(item_id)},
-        {'$set': {'status': nova_coluna}}
-    )
+    try:
+        # Atualizar o status do item no MongoDB
+        collection_pedido.update_one(
+            {'_id': ObjectId(item_id)},
+            {'$set': {'status': nova_coluna}}
+        )
+        return jsonify({'message': 'Item movido com sucesso!'})
 
-    emit_kanban_update()
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
-    return jsonify({'message': 'Item movido com sucesso!'})
 
 
 @app.route('/excluir_cotacao/<item_id>', methods=['DELETE'])
