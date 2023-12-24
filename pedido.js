@@ -30,6 +30,10 @@ function drop(ev) {
         draggedElement.appendChild(deleteButton);
     }
 
+    // Atualizar o status do cartão com base na coluna de destino
+    var newStatus = destinationBlock.id;
+    draggedElement.dataset.status = newStatus;
+
     // Verifica se o destino é "Pedidos Pendentes"
     if (destinationBlock.id === "todo") {
         // Adiciona o cartão acima do botão de cadastro
@@ -51,6 +55,19 @@ function drop(ev) {
     if (destinationBlock.id === "done") {
         updateDoneCount();
     }
+
+    // Atualizar o status no servidor
+    var itemId = draggedElement.id;
+    fetch('/mover_item_coluna/' + itemId + '/' + newStatus, {
+        method: 'PUT',
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.message); // Exibir mensagem no console
+    })
+    .catch(error => {
+        console.error('Erro ao mover item:', error);
+    });
 }
 
 function createTask() {
@@ -111,8 +128,6 @@ function saveTask() {
         console.error('Erro ao enviar dados:', error);
     });
 }
-
-
 
 function editTask() {
     var saveButton = document.getElementById("save-button");
@@ -230,7 +245,7 @@ function moverCartoesParaColuna(colunaId, cartoesIds) {
 // Função para criar o HTML do novo cartão
 function createCardHTML(taskId, title, description, status) {
     var deleteButtonHTML = '<button onclick="excluirPedido(' + taskId + ')">Excluir</button>';
-    var cardHTML = '<div id="' + taskId + '" class="task" draggable="true" ondragstart="drag(event)">' +
+    var cardHTML = '<div id="' + taskId + '" class="task" draggable="true" ondragstart="drag(event)" data-status="' + status + '">' +
         '<span><strong>Título:</strong> ' + title + '</span>' +
         '<span><strong>Descrição:</strong> ' + description + '</span>' +
         '<span><strong>Status:</strong> ' + status + '</span>' +
@@ -249,4 +264,3 @@ socket.on('atualizar_kanban', function() {
     // Aqui você deve implementar a lógica para atualizar o seu Kanban
     console.log('Atualizar Kanban em tempo real.');
 });
-
