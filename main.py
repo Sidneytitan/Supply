@@ -1,7 +1,7 @@
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request
 from flask_pymongo import PyMongo
 from bson import ObjectId
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, disconnect
 
 app = Flask(__name__)
 app.config['MONGO_URI'] = "mongodb+srv://sidneycko:titanbetty@cluster0.feenv6t.mongodb.net/supply"
@@ -55,7 +55,7 @@ def criar_cotacao():
         })
 
         novo_item_id = str(novo_item.inserted_id)
-        socketio.emit('atualizar_kanban', namespace='/kanban')
+        socketio.emit('atualizar_kanban', namespace='/kanban', broadcast=True)
         return jsonify({'success': True, 'message': 'Cotação criada com sucesso!', 'taskId': novo_item_id})
 
     return jsonify({'success': False, 'message': 'Falha ao criar cotação.'})
@@ -67,7 +67,7 @@ def mover_item_coluna(item_id, nova_coluna):
         {'_id': ObjectId(item_id)},
         {'$set': {'status': nova_coluna}}
     )
-    socketio.emit('atualizar_kanban', namespace='/kanban')
+    socketio.emit('atualizar_kanban', namespace='/kanban', broadcast=True)
     return jsonify({'message': 'Item movido com sucesso!'})
 
 # Restante do código...
@@ -77,9 +77,13 @@ def mover_item_coluna(item_id, nova_coluna):
 def handle_connect():
     print('Client connected')
 
+# Função para lidar com a desconexão de um cliente via WebSocket
+@socketio.on('disconnect', namespace='/kanban')
+def handle_disconnect():
+    print('Client disconnected')
+
 if __name__ == "__main__":
     socketio.run(app, debug=True)
-
 
 #Anotação
 
