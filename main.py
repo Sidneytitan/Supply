@@ -27,7 +27,6 @@ def pedido():
     dados_kanban = list(collection_pedido.find())
     return render_template('pedido.html', dados_kanban=dados_kanban)
 
-
 # Rota para adicionar um novo pedido
 @app.route('/add', methods=['POST'])
 def add():
