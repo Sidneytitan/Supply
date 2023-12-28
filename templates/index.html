@@ -4,9 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="{{ url_for('static', filename='Botao_cadastro.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='layout_lista_fornecedor.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:600">
+
+    <!-- Estilos adicionados para o modal -->
     <style>
-        /* Coloque aqui o conteúdo do seu CSS */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            max-width: 600px;
+            background-color: #fefefe;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+        }
+
+        .modal-content {
+            text-align: left;
+        }
+
     </style>
 </head>
 
@@ -24,25 +46,26 @@
     </div>
 
     <!-- Adicione o campo de pesquisa -->
-    <form action="/pesquisar" method="GET">
-        <label for="filtro">Filtrar por:</label>
-        <select name="filtro">
-            <option value="fornecedor">Fornecedor</option>
-            <option value="cnpj">CNPJ</option>
-            <option value="local">Local</option>
-             <option value="Forma_pagamento">Forma de pagamento</option>
-            <!-- Adicione outras opções para colunas que deseja permitir a pesquisa -->
-        </select>
-        <input type="text" name="termo" placeholder="Digite sua pesquisa">
-        <button type="submit">Pesquisar</button>
-    </form>
+<form action="/pesquisar" method="GET" style="display: flex; align-items: center; margin-left: 2%">
+    <label for="filtro">Filtrar por:</label>
+    <select name="filtro" style="margin-right: 10px;">
+        <option value="fornecedor">Fornecedor</option>
+        <option value="cnpj">CNPJ</option>
+        <option value="local">Local</option>
+        <option value="Forma_pagamento">Forma de pagamento</option>
+        <!-- Adicione outras opções para colunas que deseja permitir a pesquisa -->
+    </select>
+    <input type="text" name="termo" placeholder="Digite sua pesquisa" style="margin-right: 10px;">
+    <button type="submit" class="meu-botao2">Pesquisar</button>
+</form>
 
+    </form>
 
     <div class="table-container">
         <div>
-        <a href="adicionar" class="button-cadastro">Cadastro de Fornecedor</a>
-        <a href="excluir" class="button-excluir">Excluir de Fornecedor</a>
-    </div>
+            <button onclick="openCadastroModal()" class="meu-botao">Cadastro de Fornecedor</button>
+            <button onclick="openExcluirModal()" class="meu-botao">Excluir de Fornecedor</button>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -57,7 +80,6 @@
                     <th>Forma de pagamento</th>
                 </tr>
             </thead>
-
             <tbody>
                 {% for item in data_list %}
                     <tr>
@@ -70,14 +92,73 @@
                         <td>{{ item.get('cep', '') }}</td>
                         <td>{{ item.get('Ramo', '') }}</td>
                         <td>{{ item.get('Forma_pagamento', '') }}</td>
-
-
-
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
+    <!-- Modal de Cadastro -->
+    <div id="cadastroModal" class="modal">
+        <div class="modal-content">
+            <form action="/adicionar_fornecedor" method="post">
+                Fornecedor: <input type="text" name="fornecedor" required><br>
+                CNPJ: <input type="text" name="cnpj" required><br>
+                Telefone: <input type="text" name="telefone" required><br>
+                Responsavel: <input type="text" name="responsavel" required><br>
+                Local: <input type="text" name="local" required><br>
+                CEP: <input type="text" name="cep" required><br>
+                Ramo: <input type="text" name="ramo" required><br>
+                Forma de Pagamento: <input type="text" name="forma_pagamento" required><br>
+                <button onclick="openCadastroModal()" class="meu-botao">Adicionar</button>
+
+            </form>
+            <button onclick="closeCadastroModal()" >Fechar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Exclusão -->
+    <div id="excluirModal" class="modal">
+        <div class="modal-content">
+            <form action="/excluir" method="post">
+                {% if dados %}
+                    {% for key, value in dados.items() %}
+                        {{ key }}: {{ value }}<br>
+                    {% endfor %}
+                    <input type="hidden" name="Fornecedor" value="{{ dados.Fornecedor }}">
+
+                {% else %}
+                    <label for="Fornecedor">Fornecedor:</label>
+                    <input type="text" id="Fornecedor" name="Fornecedor" required><br>
+                {% endif %}
+                <button type="submit" class="meu-botao" value="Excluir">Excluir</button>
+
+            </form>
+            <button onclick="closeExcluirModal()">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Adicione o seu JavaScript para abrir/fechar os modais aqui -->
+    <script>
+        function openCadastroModal() {
+            document.getElementById('cadastroModal').style.display = 'block';
+        }
+
+        function closeCadastroModal() {
+            document.getElementById('cadastroModal').style.display = 'none';
+        }
+
+        function openExcluirModal() {
+            document.getElementById('excluirModal').style.display = 'block';
+        }
+
+        function closeExcluirModal() {
+            document.getElementById('excluirModal').style.display = 'none';
+        }
+    </script>
+
 </body>
 
 </html>
+
+

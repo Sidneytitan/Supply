@@ -1,8 +1,9 @@
 /* Estilizando os campos "Placa" e "Transportadora" */
 input[type="text"] {
+    margin-top: 10%
     margin-bottom: 20px; /* Espaçamento inferior */
     margin-left: 5px; /* Espaço à esquerda do campo de entrada */
-    width: calc(20% - 20px); /* Ocupa 20% da largura disponível com margens à direita e à esquerda */
+    width: calc(30% - 20px); /* Ocupa 20% da largura disponível com margens à direita e à esquerda */
     padding: 10px; /* Espaçamento interno */
     border: 1px solid #ccc; /* Borda com cor cinza claro */
     border-radius: 5px; /* Bordas arredondadas */
@@ -13,7 +14,7 @@ input[type="text"] {
 
 /* Estilizando o botão */
 .meu-botao {
-    background-color: #164888; /* Cor do fundo do botão */
+    background-color: #0B1D27; /* Cor do fundo do botão */
     border: none;
     color: white; /* Cor do texto dentro do botão */
     text-align: center;
@@ -26,11 +27,13 @@ input[type="text"] {
     padding: 14px 28px; /* Espaçamento interno do botão */
     transition: background-color 0.4s, opacity 0.4s; /* Transição para a cor de fundo e opacidade */
     opacity: 0.9; /* Opacidade inicial */
+    margin-left: 300px;
+
 }
 
 /* Estilo do botão ao passar o mouse por cima */
 .meu-botao:hover {
-    background-color: #3F48CC; /* Cor de fundo ao passar o mouse */
+    background-color: #16394D; /* Cor de fundo ao passar o mouse */
     opacity: 1; /* Opacidade ao passar o mouse (totalmente visível) */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Efeito de sombra ao passar o mouse */
 }
@@ -44,7 +47,7 @@ input[type="text"] {
 
 /* No seu arquivo CSS */
 input:invalid {
-    border-color: red; /* Cor da borda para campos inválidos */
+    border-color: #030624; /* Cor da borda para campos inválidos */
     background-color: #ffcccc; /* Cor de fundo para campos inválidos */
 }
 
@@ -70,7 +73,7 @@ h1 {
     text-align: right; /* Alinha o texto à direita dentro do contêiner */
 }
 
-/* Restante do seu código CSS */
+
 /* ... */
 
 * {
@@ -85,7 +88,7 @@ h1 {
 body {
   height: 100vh;
   width: 100vw;
-  display: flex;
+
   justify-content: center;
   align-items: center;
   overflow: hidden;
@@ -204,20 +207,76 @@ h1 {
   margin-top: 10px; /* Ajusta a margem superior (espaço acima do texto) */
   margin-left: -10px;
 
-
-
-  /* Outras propriedades de estilo de fonte conforme necessário */
 }
 
-<head>
-    <!-- ... outras meta tags e links ... -->
-    <link rel="stylesheet" href="caminho/para/o/seu/arquivo/estilos.css">
-</head>
+/* Estilos para o modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    max-width: 600px;
+    background-color: #fff; /* Cor de fundo */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+}
 
-<body>
-    <!-- ... conteúdo do corpo ... -->
-</body>
+.modal-content {
+    text-align: left;
+}
 
-</html>
+/* Estilos para os campos do formulário dentro do modal */
+.modal-content input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
 
 
+
+
+
+/* Estilos para os links no modal */
+.modal-content a {
+    color: #3498db; /* Cor dos links */
+    text-decoration: none;
+}
+
+/* Estilo para os links ao passar o mouse */
+.modal-content a:hover {
+    text-decoration: underline;
+}
+
+.meu-botao2 {
+    background-color: #0B1D27;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 4px;
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 14px 28px;
+    transition: background-color 0.4s, opacity 0.4s;
+    opacity: 0.9;
+    margin-left: 10px; /* Ajuste o valor conforme necessário */
+    margin-top: 1,5px; /* Ajuste o valor conforme necessário */
+
+
+}
+
+/* Estilo do botão ao passar o mouse por cima */
+.meu-botao2:hover {
+    background-color: #16394D; /* Cor de fundo ao passar o mouse */
+    opacity: 1; /* Opacidade ao passar o mouse (totalmente visível) */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Efeito de sombra ao passar o mouse */
+}

@@ -17,3 +17,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
+
+// Coloque aqui o conteúdo do seu JavaScript para abrir/fechar o modal
+function openCadastroModal() {
+    document.getElementById('cadastroModal').style.display = 'block';
+}
+
+function closeCadastroModal() {
+    document.getElementById('cadastroModal').style.display = 'none';
+}
