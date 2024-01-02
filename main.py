@@ -12,6 +12,8 @@ mongo = PyMongo(app)
 collection_pedido = mongo.db.pedido
 collection_cotacao = mongo.db.cotacao
 collection_lista_fornecedor = mongo.db.lista_fornecedor
+collection_gestao_pedido = mongo.db.gestao_pedido
+
 
 
 
@@ -180,6 +182,97 @@ def pesquisar():
     data_list = list(collection_lista_fornecedor.find(query))
 
     return render_template('index.html', data_list=data_list)
+
+# Rota para exibir a lista de pedidos novo codigo
+# Rota para exibir a lista de pedidos
+@app.route('/listapedido')
+def lista_pedido():
+    # Obtendo dados do MongoDB na coleção gestao_pedido
+    data_list = list(collection_gestao_pedido.find())
+    return render_template('gestao_pedido.html', data_list=data_list)
+
+
+# Rota para exibir o formulário de adição de pedidos
+@app.route('/adicionar_pedido', methods=['GET'])
+def exibir_formulario_adicao_pedido():
+    return render_template('adicionar_pedido.html')
+
+# Rota para lidar com a adição de pedidos (POST)
+@app.route('/adicionar_pedido', methods=['POST'])
+def adicionar_pedido():
+    if request.method == 'POST':
+        novo_pedido = {
+            'numero_pedido': request.form['numero_pedido'],
+            'filial': request.form['filial'],
+            'fornecedor': request.form['fornecedor'],
+            'status': request.form['status'],
+            'observacao': request.form['observacao']
+        }
+
+        # Insere o pedido no MongoDB
+        collection_gestao_pedido.insert_one(novo_pedido)
+
+
+    return redirect(url_for('lista_pedido'))
+
+
+# Rota para exibir o formulário de exclusão de pedidos
+@app.route('/excluir_pedido', methods=['GET', 'POST'])
+def exibir_formulario_exclusao_pedido():
+    if request.method == 'POST':
+        # Obtendo o número do pedido a ser excluído do formulário
+        numero_pedido = request.form.get('numero_pedido')
+
+        # Excluir o pedido pelo número do pedido
+        collection_gestao_pedido.delete_one({'numero_pedido': numero_pedido})
+
+
+        return redirect(url_for('lista_pedido'))
+
+    return render_template('excluir_pedido.html')
+
+
+# Adicione uma rota para lidar com a pesquisa de pedidos
+@app.route('/pesquisar_pedido', methods=['GET'])
+def pesquisar_pedido():
+    # Obter os parâmetros da pesquisa
+    filtro = request.args.get('filtro')
+    termo = request.args.get('termo')
+
+    # Construir a consulta MongoDB com base nos parâmetros de pesquisa
+    query = {filtro: {'$regex': termo, '$options': 'i'}}
+    data_list = list(collection_gestao_pedido.find(query))
+
+    return render_template('gestao_pedido.html', data_list=data_list)
+
+
+@app.route('/atualizar_filial', methods=['POST'])
+def atualizar_filial():
+    # Lógica para atualizar a filial no banco de dados
+    # Certifique-se de que você está recebendo os dados corretamente do frontend
+    data = request.get_json()
+    nova_filial = data['novaFilial']
+    pedido_id = data['pedidoId']
+
+    # Sua lógica de atualização aqui
+
+    # Exemplo de resposta (você pode personalizar conforme necessário)
+    return jsonify({'status': 'success', 'message': 'Filial atualizada com sucesso'})
+
+
+@app.route('/atualizar_status', methods=['POST'])
+def atualizar_status():
+    # Lógica para atualizar o status no banco de dados
+    # Certifique-se de que você está recebendo os dados corretamente do frontend
+    data = request.get_json()
+    novo_status = data['novoStatus']
+    pedido_id = data['pedidoId']
+
+    # Sua lógica de atualização aqui
+
+    # Exemplo de resposta (você pode personalizar conforme necessário)
+    return jsonify({'status': 'success', 'message': 'Status atualizado com sucesso'})
+
 
 if __name__ == "__main__":
     app.run(debug=True)

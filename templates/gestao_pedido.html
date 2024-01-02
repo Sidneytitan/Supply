@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='Botao_cadastro.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='layout_lista_fornecedor.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:600">
+
+    <!-- Estilos adicionados para o modal -->
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            max-width: 600px;
+            background-color: #fefefe;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+        }
+
+        .modal-content {
+            text-align: left;
+        }
+
+        /* Estilos para campos de seleção personalizados */
+        .custom-select {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        select {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            appearance: none;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        select:hover {
+            border-color: #888;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #555;
+        }
+
+        /* Estilos adicionais conforme necessário */
+    </style>
+</head>
+
+<body>
+    <!-- Menu Navigation Bar -->
+    <div class="menu-with-background">
+        <div class="menu">
+            <a href="/">Home</a>
+            <a href="/listafornecedor">Lista de Fornecedor</a>
+            <a href="kanban">Cotações</a>
+            <a href="listapedido">Pedidos</a>
+        </div>
+        <div class="neon supply-chain">Supply Chain</div>
+        <div class="neon fornecedores">Gestão de Fornecedores</div>
+    </div>
+
+    <!-- Adicione o campo de pesquisa -->
+    <form action="/pesquisar_pedido" method="GET" style="display: flex; align-items: center; margin-left: 2%">
+        <label for="filtro">Filtrar por:</label>
+        <select name="filtro" style="margin-right: 10px;">
+            <option value="numero_pedido">Número de Pedido</option>
+            <option value="filial">Filial</option>
+            <option value="fornecedor">Fornecedor</option>
+            <option value="status">Status</option>
+            <option value="observacao">Observação</option>
+            <!-- Adicione outras opções para colunas que deseja permitir a pesquisa -->
+        </select>
+        <input type="text" name="termo" placeholder="Digite sua pesquisa" style="margin-right: 10px;">
+        <button type="submit" class="meu-botao2">Pesquisar</button>
+    </form>
+
+    <div class="table-container">
+        <div>
+            <button onclick="openCadastroModal()" class="meu-botao">Cadastro de Pedido</button>
+            <button onclick="openExcluirModal()" class="meu-botao">Excluir Pedido</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Número de Pedido</th>
+                    <th>Filial</th>
+                    <th>Fornecedor</th>
+                    <th>Status</th>
+                    <th>Observação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data_list %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ item.get('numero_pedido', '') }}</td>
+                        <td>
+                            <div class="custom-select">
+                                <select name="filial" onchange="atualizarFilial(this.value, '{{ item.get('_id') }}')">
+                                    <option value="Uberlandia" {% if item.get('filial') == 'Uberlandia' %}selected{% endif %}>Uberlandia</option>
+                                    <option value="Americana" {% if item.get('filial') == 'Americana' %}selected{% endif %}>Americana</option>
+                                    <option value="SEN CANEDO" {% if item.get('filial') == 'SEN CANEDO' %}selected{% endif %}>SEN CANEDO</option>
+                                    <option value="Barueri" {% if item.get('filial') == 'Barueri' %}selected{% endif %}>Barueri</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>{{ item.get('fornecedor', '') }}</td>
+                        <td>
+                            <div class="custom-select">
+                                <select name="status" onchange="atualizarStatus(this.value, '{{ item.get('_id') }}')">
+                                    <option value="Pedidos Pendentes" {% if item.get('status') == 'Pedidos Pendentes' %}selected{% endif %}>Pedidos Pendentes</option>
+                                    <option value="Pedido Com Nota Fiscal/Finalizado" {% if item.get('status') == 'Pedido Com Nota Fiscal/Finalizado' %}selected{% endif %}>Pedido Com Nota Fiscal/Finalizado</option>
+                                    <option value="Pedidos Com Boleto enviado para o Fiscal" {% if item.get('status') == 'Pedidos Com Boleto enviado para o Fiscal' %}selected{% endif %}>Pedidos Com Boleto enviado para o Fiscal</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>{{ item.get('observacao', '') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal de Cadastro -->
+    <div id="cadastroModal" class="modal">
+        <div class="modal-content">
+            <form action="/adicionar_pedido" method="post">
+                Número de Pedido: <input type="text" name="numero_pedido" required><br>
+                Filial:
+                <select name="filial" required>
+                    <option value="Uberlandia">Uberlandia</option>
+                    <option value="Americana">Americana</option>
+                    <option value="SEN CANEDO">SEN CANEDO</option>
+                    <option value="Barueri">Barueri</option>
+                </select><br>
+                Fornecedor: <input type="text" name="fornecedor" required><br>
+                Status:
+                <select name="status" required>
+                    <option value="Pedidos Pendentes">Pedidos Pendentes</option>
+                    <option value="Pedido Com Nota Fiscal/Finalizado">Pedido Com Nota Fiscal/Finalizado</option>
+                    <option value="Pedidos Com Boleto enviado para o Fiscal">Pedidos Com Boleto enviado para o Fiscal</option>
+                </select><br>
+                Observação: <input type="text" name="observacao" required><br>
+                <button onclick="openCadastroModal()" class="meu-botao">Adicionar</button>
+            </form>
+            <button onclick="closeCadastroModal()">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Exclusão -->
+    <div id="excluirModal" class="modal">
+        <div class="modal-content">
+            <form action="/excluir_pedido" method="post">
+                {% if dados %}
+                    {% for key, value in dados.items() %}
+                        {{ key }}: {{ value }}<br>
+                    {% endfor %}
+                    <input type="hidden" name="Produto" value="{{ dados.Produto }}">
+                {% else %}
+                    <label for="numero_pedido">Número de Pedido:</label>
+                    <input type="text" id="numero_pedido" name="numero_pedido" required><br>
+                {% endif %}
+                <button type="submit" class="meu-botao" value="Excluir">Excluir</button>
+            </form>
+            <button onclick="closeExcluirModal()">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Adicione o seu JavaScript para abrir/fechar os modais aqui -->
+    <script>
+        function openCadastroModal() {
+            document.getElementById('cadastroModal').style.display = 'block';
+        }
+
+        function closeCadastroModal() {
+            document.getElementById('cadastroModal').style.display = 'none';
+        }
+
+        function openExcluirModal() {
+            document.getElementById('excluirModal').style.display = 'block';
+        }
+
+        function closeExcluirModal() {
+            document.getElementById('excluirModal').style.display = 'none';
+        }
+
+        function atualizarStatus(novoStatus, pedidoId) {
+            // Implemente a lógica para atualizar o status no servidor usando AJAX ou outra abordagem
+            alert('Atualizar status para: ' + novoStatus + ' no pedido com ID: ' + pedidoId);
+        }
+
+        function atualizarFilial(novaFilial, pedidoId) {
+            // Implemente a lógica para atualizar a filial no servidor usando AJAX ou outra abordagem
+            alert('Atualizar filial para: ' + novaFilial + ' no pedido com ID: ' + pedidoId);
+        }
+    </script>
+</body>
+
+</html>
+
